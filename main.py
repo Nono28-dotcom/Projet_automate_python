@@ -1,14 +1,26 @@
-from automaton import  read_txt
+from automaton import  *
 
 def main():
-    # Nom du fichier à lire
-    filename = "../Projet_automate_python/automates_de_tests/A3.txt"
+    while True:
+        numero = input("\nNuméro de l'automate à charger (ou 'q' pour quitter) : ").strip()
 
-    # Lecture du fichier et création de l’automate
-    automaton = read_txt(filename)
+        if numero.lower() == 'q':
+            print("Au revoir !")
+            break
 
-    # Affichage de l’automate
-    automaton.display()
+        filename = f"../Projet_automate_python/automates_de_tests/A{numero}.txt"
+        automaton = read_txt(filename)
+
+        # Affichage de l'automate
+        automaton.display()
+
+        if non_standard(automaton):
+            reponse = input("\nVoulez-vous standardiser l'automate ? (o/n) : ").strip().lower()
+            if reponse == 'o':
+                SFA = standardisation(automaton)
+                SFA.display()
+                automaton = SFA
+
 
 if __name__ == "__main__":
     main()

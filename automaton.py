@@ -63,3 +63,65 @@ def read_txt(filename):
         #on insère l'état de départ, le symbole associé a la transition e l'état d'arrivé
 
     return Automaton(num_symbols, num_states, initial_states, final_states, transitions)
+
+
+def standardisation(AF):
+    print("\n── Standardisation ────────────────────────")
+
+    i0 = AF.num_states
+
+    nouvelles_transitions = list(AF.transitions)
+
+    for etat_init in AF.initial_states:
+        for (start_state, symbol, end_state) in AF.transitions:
+            if start_state == etat_init:
+                nouvelle = (i0, symbol, end_state)
+                if nouvelle not in nouvelles_transitions:
+                    nouvelles_transitions.append(nouvelle)
+
+
+    nouveaux_terminaux = list(AF.final_states)
+    if any(e in AF.final_states for e in AF.initial_states):
+        if i0 not in nouveaux_terminaux:
+            nouveaux_terminaux.append(i0)
+
+    print(f"  Nouvel état initial créé : {i0}")
+    print(f"  Il hérite des transitions de : {AF.initial_states}")
+    if i0 in nouveaux_terminaux:
+        print(f"  {i0} est aussi terminal (un ancien initial l'était).")
+
+    return Automaton(
+        num_symbols=AF.num_symbols,
+        num_states=AF.num_states + 1,
+        initial_states=[i0],
+        final_states=nouveaux_terminaux,
+        transitions=nouvelles_transitions
+    )
+
+
+def non_standard(AF):
+    print("\n── Test : standard ? ──────────────────────")
+    raisons = []
+
+    if len(AF.initial_states) != 1:
+        raisons.append(
+            f"  → Nombre d'états initiaux : {len(AF.initial_states)} (doit être 1)"
+        )
+
+    if len(AF.initial_states) >= 1:
+        etat_init = AF.initial_states[0]
+        for (start_state, symbol, end_state) in AF.transitions:
+            if end_state == etat_init:
+                raisons.append(
+                    f"  → Transition ({start_state}, '{symbol}') "
+                    f"arrive sur l'état initial {etat_init}"
+                )
+
+    if raisons:
+        print("  L'automate N'EST PAS standard :")
+        for r in raisons:
+            print(r)
+        return True
+    else:
+        print("  L'automate EST standard.")
+        return False
