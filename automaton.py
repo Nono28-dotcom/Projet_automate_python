@@ -169,3 +169,103 @@ def non_standard(AF):
     else:
         print("  L'automate EST standard.")
         return False
+
+
+def minimize(self):
+    alphabet = [chr(ord('a') + i) for i in range(self.num_symbol)]
+    # on génére l'alphabet selon le nombre de symboles de l'automate
+
+    final_states = set(self.final_states)
+    non_final_states = set(range(self.num_states)) - final_states
+    partitions = [final_states, non_final_states]
+    # on crée la partition initiale en créant des ensembles d'états
+
+    changed = True
+
+    while changed:
+        changed = False
+        new_partitions = []
+        # on répéte la boucle tant que l'automate est modifié
+
+        for group in partitions:
+            subgroups = {}
+            # on prends un groupe d'état dans la partition
+
+            for state in group:
+                signature = []
+                # pour chaque état, la signature décrit vers quel groupe il va
+
+                for symbol in alphabet:
+                    next_states = [
+                        t[2] for t in self.transitions
+                        if t[0] == state and t[1] == symbol
+                    ]
+                    # on crée ici pour chaque état de l'alphabet une liste qui fait l'inventaire de chauque état suivant en faisant correspondre l'état et le symbole avec l'automate chargé
+
+                    next_state = next_states[0] if next_states else None
+                    # on crée une variable qui stock l'état suivant si il existe
+
+                    for i, p in enumerate(partitions):
+                        if next_state in p:
+                            signature.append(i)
+                            break
+                    # on rajoute l'indice de l'ensemble de la partition initiale dans lequel l'état suivant est présent
+
+                signature = tuple(signature)
+
+                if signature not in subgroups:
+                    subgroups[signature] = set()
+                subgroups[signature].add(state)
+
+            new_partitions.extend(subgroups.values())
+            # on rajoute tout les nouveaux sous groupe dans la nouvelle partition
+
+            if len(subgroups) > 1:
+                changed = True
+            # si le groupe de départ à été modifié, on relance une itération
+
+        partitions = new_partitions
+        # on remplace la partition initiale par la nouvelle partition
+
+    new_states = list(partitions)
+    # chaque groupe devient un état
+
+    new_transitions = []
+    new_initial = None
+    new_final = []
+
+    # on crée les listes pour le nouvel automate et on s'aprete a recalculer le nouvel état initial
+
+    for i, group in enumerate(new_states):
+        if any(s in self.initial_states for s in group):
+            new_initial = i
+            # on cherche l'ancien état initial dans les nouveaux états
+
+        if any(s in self.final_states for s in group):
+            new_final.append(i)
+            # meme chose pour les états finaux
+
+        for symbol in alphabet:
+            state = next(iter(group))
+
+            next_state = [
+                t[2] for t in self.transitions
+                if t[0] == state and t[1] == symbol
+            ][0]
+
+            for j, g in enumerate(new_states):
+                if next_state in g:
+                    new_transitions.append((i, symbol, j))
+
+    # Sauvegarde correspondance
+    self.minimized_partitions = new_states
+
+    return Automaton(
+        self.num_symbols,
+        len(new_states),
+        [new_initial],
+        new_final,
+        new_transitions
+    )
+
+
