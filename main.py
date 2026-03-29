@@ -78,6 +78,12 @@ def main():
                         automate_a_utiliser = AFDC
 
             elif choix == '3':
+                if not is_deterministic(automate_a_utiliser) or any(
+                        sym == '&' for (_, sym, _) in automate_a_utiliser.transitions):
+                    automate_a_utiliser = determinize_and_complete(automate_a_utiliser)
+                elif not is_complete(automate_a_utiliser):
+                    automate_a_utiliser = complete(automate_a_utiliser)
+
                 automate_minimise = automate_a_utiliser.minimize()
                 automate_minimise.display_minimal()
                 automate_a_utiliser = automate_minimise
