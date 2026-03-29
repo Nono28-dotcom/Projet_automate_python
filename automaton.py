@@ -268,4 +268,11 @@ def minimize(self):
         new_transitions
     )
 
+def display_minimal(self):
+    print("Automate minimal :")
 
+    print("États (groupes) :")
+    for i, group in enumerate(self.minimized_partitions):
+        print(f"{i} -> {group}")
+
+    self.display()
