@@ -1,0 +1,213 @@
+── Automate de base ────────────────────────
+Automate chargé :
+Nombre de lettres : 3
+Nombre d'états:  22
+Etats initiaux :  [0]
+Etats finaux : [21]
+Transitions :
+0 --&--> 1
+0 --&--> 10
+1 --&--> 2
+1 --&--> 6
+2 --&--> 3
+3 --b--> 4
+4 --&--> 3
+4 --&--> 5
+2 --&--> 5
+5 --&--> 8
+6 --a--> 7
+7 --&--> 8
+8 --c--> 9
+9 --&--> 21
+10 --&--> 11
+10 --&--> 15
+11 --&--> 12
+12 --a--> 13
+13 --&--> 12
+13 --&--> 14
+11 --&--> 14
+14 --&--> 17
+15 --b--> 16
+16 --&--> 17
+17 --&--> 18
+18 --c--> 19
+19 --&--> 18
+19 --&--> 20
+17 --&--> 20
+20 --&--> 21
+
+── Étape 1 : Standardisation ───────────────
+
+── Test : standard ? ──────────────────────
+  L'automate EST standard.
+
+── Étape 2 : Déterminisation et complétion ─
+
+── Déterminisation et complétion ──────────
+
+  Traitement de l'état 0 = {0, 1, 2, 3, 5, 6, 8, 10, 11, 12, 14, 15, 17, 18, 20, 21}
+    avec 'a' → {7, 8, 12, 13, 14, 17, 18, 20, 21} = état 1
+    avec 'b' → {3, 4, 5, 8, 16, 17, 18, 20, 21} = état 2
+    avec 'c' → {18, 19, 20, 21, 9} = état 3
+
+  Traitement de l'état 1 = {7, 8, 12, 13, 14, 17, 18, 20, 21}
+    avec 'a' → {17, 18, 20, 21, 12, 13, 14} = état 4
+    avec 'b' → RIEN
+    avec 'c' → {18, 19, 20, 21, 9} = état 3
+
+  Traitement de l'état 2 = {3, 4, 5, 8, 16, 17, 18, 20, 21}
+    avec 'a' → RIEN
+    avec 'b' → {8, 3, 4, 5} = état 5
+    avec 'c' → {18, 19, 20, 21, 9} = état 3
+
+  Traitement de l'état 3 = {18, 19, 20, 21, 9}
+    avec 'a' → RIEN
+    avec 'b' → RIEN
+    avec 'c' → {18, 19, 20, 21} = état 6
+
+  Traitement de l'état 4 = {17, 18, 20, 21, 12, 13, 14}
+    avec 'a' → {17, 18, 20, 21, 12, 13, 14} = état 4
+    avec 'b' → RIEN
+    avec 'c' → {18, 19, 20, 21} = état 6
+
+  Traitement de l'état 5 = {8, 3, 4, 5}
+    avec 'a' → RIEN
+    avec 'b' → {8, 3, 4, 5} = état 5
+    avec 'c' → {9, 21} = état 7
+
+  Traitement de l'état 6 = {18, 19, 20, 21}
+    avec 'a' → RIEN
+    avec 'b' → RIEN
+    avec 'c' → {18, 19, 20, 21} = état 6
+
+  Traitement de l'état 7 = {9, 21}
+    avec 'a' → RIEN
+    avec 'b' → RIEN
+    avec 'c' → RIEN
+
+  État poubelle créé : 8
+
+  Correspondance des états :
+    État 0 ← {0.1.2.3.5.6.8.10.11.12.14.15.17.18.20.21} (T)
+    État 1 ← {7.8.12.13.14.17.18.20.21} (T)
+    État 2 ← {3.4.5.8.16.17.18.20.21} (T)
+    État 3 ← {9.18.19.20.21} (T)
+    État 4 ← {12.13.14.17.18.20.21} (T)
+    État 5 ← {3.4.5.8}
+    État 6 ← {18.19.20.21} (T)
+    État 7 ← {9.21} (T)
+    État 8 ← {poubelle}
+Automate chargé :
+Nombre de lettres : 3
+Nombre d'états:  9
+Etats initiaux :  [0]
+Etats finaux : [0, 1, 2, 3, 4, 6, 7]
+Transitions :
+0 --a--> 1
+0 --b--> 2
+0 --c--> 3
+1 --a--> 4
+1 --c--> 3
+2 --b--> 5
+2 --c--> 3
+3 --c--> 6
+4 --a--> 4
+4 --c--> 6
+5 --b--> 5
+5 --c--> 7
+6 --c--> 6
+1 --b--> 8
+2 --a--> 8
+3 --a--> 8
+3 --b--> 8
+4 --b--> 8
+5 --a--> 8
+6 --a--> 8
+6 --b--> 8
+7 --a--> 8
+7 --b--> 8
+7 --c--> 8
+8 --a--> 8
+8 --b--> 8
+8 --c--> 8
+
+── Étape 3 : Minimisation ──────────────────
+
+── Automate minimal ──────────────────────
+États (groupes fusionnés) :
+  0 -> [0]
+  1 -> [1, 4]
+  2 -> [2]
+  3 -> [3, 6]
+  4 -> [7]
+  5 -> [8]
+  6 -> [5]
+Automate chargé :
+Nombre de lettres : 3
+Nombre d'états:  7
+Etats initiaux :  [0]
+Etats finaux : [0, 1, 2, 3, 4]
+Transitions :
+0 --a--> 1
+0 --b--> 2
+0 --c--> 3
+1 --a--> 1
+1 --b--> 5
+1 --c--> 3
+2 --a--> 5
+2 --b--> 6
+2 --c--> 3
+3 --a--> 5
+3 --b--> 5
+3 --c--> 3
+4 --a--> 5
+4 --b--> 5
+4 --c--> 5
+5 --a--> 5
+5 --b--> 5
+5 --c--> 5
+6 --a--> 5
+6 --b--> 6
+6 --c--> 4
+
+── Étape 4 : Automate complémentaire ───────
+
+-- Construction de l'automate complémentaire --
+
+── Test : déterministe ? ──────────────────
+  L'automate EST déterministe.
+
+── Test : complet ? ───────────────────────
+  L'automate EST complet.
+  L'automate est déjà déterministe et complet.
+  Le complément est construit à partir de cet automate.
+Automate chargé :
+Nombre de lettres : 3
+Nombre d'états:  7
+Etats initiaux :  [0]
+Etats finaux : [5, 6]
+Transitions :
+0 --a--> 1
+0 --b--> 2
+0 --c--> 3
+1 --a--> 1
+1 --b--> 5
+1 --c--> 3
+2 --a--> 5
+2 --b--> 6
+2 --c--> 3
+3 --a--> 5
+3 --b--> 5
+3 --c--> 3
+4 --a--> 5
+4 --b--> 5
+4 --c--> 5
+5 --a--> 5
+5 --b--> 5
+5 --c--> 5
+6 --a--> 5
+6 --b--> 6
+6 --c--> 4
+
+── Étape 5 : Reconnaissance de mots ────────
+Alphabet reconnu : {'c', 'b', 'a'}
