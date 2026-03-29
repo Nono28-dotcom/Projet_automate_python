@@ -1,0 +1,166 @@
+Numéro de l'automate à charger (ou 'q' pour quitter) : 12
+Automate chargé :
+Nombre de lettres : 4
+Nombre d'états:  2
+Etats initiaux :  [1]
+Etats finaux : [1]
+Transitions :
+1 --a--> 1
+1 --c--> 0
+0 --d--> 1
+0 --b--> 0
+
+── Que voulez-vous faire ? ─────────────────
+  1. Standardiser l'automate
+  2. Déterminiser et compléter l'automate
+  3. Minimiser l'automate
+  4. Construire l'automate complémentaire
+  5. Rechercher un mot
+  6. Tout faire automatiquement
+  7. Changer d'automate
+  q. Quitter
+
+Votre choix : 6
+
+══ Traitement automatique complet ══════════
+
+── Automate de base ────────────────────────
+Automate chargé :
+Nombre de lettres : 4
+Nombre d'états:  2
+Etats initiaux :  [1]
+Etats finaux : [1]
+Transitions :
+1 --a--> 1
+1 --c--> 0
+0 --d--> 1
+0 --b--> 0
+
+── Étape 1 : Standardisation ───────────────
+
+── Test : standard ? ──────────────────────
+  L'automate N'EST PAS standard :
+  → Transition (1, 'a') arrive sur l'état initial 1
+  → Transition (0, 'd') arrive sur l'état initial 1
+
+── Standardisation ────────────────────────
+  Nouvel état initial créé : 2
+  Il hérite des transitions de : [1]
+  2 est aussi terminal (un ancien initial l'était).
+Automate chargé :
+Nombre de lettres : 4
+Nombre d'états:  3
+Etats initiaux :  [2]
+Etats finaux : [1, 2]
+Transitions :
+1 --a--> 1
+1 --c--> 0
+0 --d--> 1
+0 --b--> 0
+2 --a--> 1
+2 --c--> 0
+
+── Étape 2 : Déterminisation et complétion ─
+
+── Test : déterministe ? ──────────────────
+  L'automate EST déterministe.
+
+── Test : complet ? ───────────────────────
+  → Pas de transition depuis l'état 0 avec 'a'
+  → Pas de transition depuis l'état 0 avec 'c'
+  → Pas de transition depuis l'état 1 avec 'b'
+  → Pas de transition depuis l'état 1 avec 'd'
+  → Pas de transition depuis l'état 2 avec 'b'
+  → Pas de transition depuis l'état 2 avec 'd'
+  L'automate N'EST PAS complet.
+
+── Complétion ─────────────────────────────
+  → Transition ajoutée : 0 --a--> 3 (poubelle)
+  → Transition ajoutée : 0 --c--> 3 (poubelle)
+  → Transition ajoutée : 1 --b--> 3 (poubelle)
+  → Transition ajoutée : 1 --d--> 3 (poubelle)
+  → Transition ajoutée : 2 --b--> 3 (poubelle)
+  → Transition ajoutée : 2 --d--> 3 (poubelle)
+  → État poubelle 3 créé, il boucle sur lui-même.
+Automate chargé :
+Nombre de lettres : 4
+Nombre d'états:  4
+Etats initiaux :  [2]
+Etats finaux : [1, 2]
+Transitions :
+1 --a--> 1
+1 --c--> 0
+0 --d--> 1
+0 --b--> 0
+2 --a--> 1
+2 --c--> 0
+0 --a--> 3
+0 --c--> 3
+1 --b--> 3
+1 --d--> 3
+2 --b--> 3
+2 --d--> 3
+3 --a--> 3
+3 --b--> 3
+3 --c--> 3
+3 --d--> 3
+
+── Étape 3 : Minimisation ──────────────────
+
+── Automate minimal ──────────────────────
+États (groupes fusionnés) :
+  0 -> [1, 2]
+  1 -> [0]
+  2 -> [3]
+Automate chargé :
+Nombre de lettres : 4
+Nombre d'états:  3
+Etats initiaux :  [0]
+Etats finaux : [0]
+Transitions :
+0 --a--> 0
+0 --b--> 2
+0 --c--> 1
+0 --d--> 2
+1 --a--> 2
+1 --b--> 1
+1 --c--> 2
+1 --d--> 0
+2 --a--> 2
+2 --b--> 2
+2 --c--> 2
+2 --d--> 2
+
+── Étape 4 : Automate complémentaire ───────
+
+-- Construction de l'automate complémentaire --
+
+── Test : déterministe ? ──────────────────
+  L'automate EST déterministe.
+
+── Test : complet ? ───────────────────────
+  L'automate EST complet.
+  L'automate est déjà déterministe et complet.
+  Le complément est construit à partir de cet automate.
+Automate chargé :
+Nombre de lettres : 4
+Nombre d'états:  3
+Etats initiaux :  [0]
+Etats finaux : [1, 2]
+Transitions :
+0 --a--> 0
+0 --b--> 2
+0 --c--> 1
+0 --d--> 2
+1 --a--> 2
+1 --b--> 1
+1 --c--> 2
+1 --d--> 0
+2 --a--> 2
+2 --b--> 2
+2 --c--> 2
+2 --d--> 2
+
+── Étape 5 : Reconnaissance de mots ────────
+Alphabet reconnu : {'a', 'c', 'd', 'b'}
+Entrez un mot à tester (ou 'c' pour revenir au menu)
