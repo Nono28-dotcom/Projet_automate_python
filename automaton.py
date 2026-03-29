@@ -23,7 +23,7 @@ class Automaton:
         for start_state, symbol, end_state in self.transitions:
             print(f"{start_state} --{symbol}--> {end_state}")
 
-    # ✅ Méthode de reconnaissance CORRIGÉE et bien indentée
+    
     def reconnaitre_mot(self, mot):
         """
         Reconnaît si un mot est accepté par l'automate.
