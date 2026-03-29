@@ -5,62 +5,99 @@ class Automaton:
         self.initial_states = initial_states
         self.final_states = final_states
         self.transitions = transitions
-        #on crée la classe automate avec les attributs suivants : nombre de lettres dans l'alphabet, nombre d'état, liste d'etats initiaux, liste d'états finaux, liste de transitions sous forme de tuple
+
+        # Création de l'alphabet à partir des symboles trouvés dans les transitions
+        self.alphabet = set()
+        for (start_state, symbol, end_state) in transitions:
+            self.alphabet.add(symbol)
+        # Alternative : générer l'alphabet à partir de num_symbols
+        # self.alphabet = {chr(ord('a') + i) for i in range(num_symbols)}
 
     def display(self):
         print("Automate chargé :")
         print("Nombre de lettres :", self.num_symbols)
         print("Nombre d'états: ", self.num_states)
-        print("Etats initiaux : ",self.initial_states)
+        print("Etats initiaux : ", self.initial_states)
         print("Etats finaux :", self.final_states)
         print("Transitions :")
         for start_state, symbol, end_state in self.transitions:
             print(f"{start_state} --{symbol}--> {end_state}")
-            #on affiche pour chaque transition l'état de départ, d'arrivée et le symbole qui assure la transition
 
+    # ✅ Méthode de reconnaissance CORRIGÉE et bien indentée
+    def reconnaitre_mot(self, mot):
+        """
+        Reconnaît si un mot est accepté par l'automate.
+        """
+        # Vérification que l'automate possède un état initial unique
+        if len(self.initial_states) != 1:  # Changé: initial_states au lieu de etats_initiaux
+            print(f"❌ L'automate a {len(self.initial_states)} états initiaux, il en faut 1.")
+            return False
 
+        # Vérifier si le mot est "end" (pour quitter)
+        if mot == "end":
+            print("Fin de la reconnaissance de mots.")
+            return True
 
+        # Récupération de l'état initial unique
+        etat_courant = self.initial_states[0]  # Changé: utilisation directe
+
+        # Parcours du mot
+        for symbole in mot:
+            # Vérifier que le symbole appartient à l'alphabet
+            if symbole not in self.alphabet:
+                print(f"❌ Symbole '{symbole}' non reconnu par l'automate")
+                return False
+
+            # Rechercher une transition
+            transition_trouvee = False
+            for (start_state, symbol, end_state) in self.transitions:
+                if start_state == etat_courant and symbol == symbole:
+                    etat_courant = end_state
+                    transition_trouvee = True
+                    break
+
+            if not transition_trouvee:
+                print(f"❌ Aucune transition pour ({etat_courant}, '{symbole}')")
+                return False
+
+        # Vérification état terminal
+        if etat_courant in self.final_states:  # Changé: final_states au lieu de etats_terminaux
+            print(f"✅ Le mot '{mot}' est accepté.")
+            return True
+        else:
+            print(f"❌ Le mot '{mot}' est rejeté (état {etat_courant} non terminal).")
+            return False
 
 
 def read_txt(filename):
-    with open(filename,"r",encoding="utf-8") as file:
+    with open(filename, "r", encoding="utf-8") as file:
         lines = [line.strip() for line in file if line.strip()]
-        #on retire les espaces et les sauts a la lines inutilles
+
     num_symbols = int(lines[0])
     num_states = int(lines[1])
-    #on lit le nombrez de symboles et d'états
 
     initial_line = lines[2].split()
     num_initial_states = int(initial_line[0])
     initial_states = list(map(int, initial_line[1:1 + num_initial_states]))
-    #on lit le nombre d'états initiaux puis on établit la liste de ces derniers
 
     final_line = lines[3].split()
     num_final_states = int(final_line[0])
-    final_states = list(map(int, final_line[1:1 + num_final_states]))#même chose avec les états terminaux
+    final_states = list(map(int, final_line[1:1 + num_final_states]))
 
     num_transitions = int(lines[4])
-    #on lit le nombres de transition
-
     transition_lines = lines[5:5 + num_transitions]
-    #on prend ici toutes les lignes a partir de la 5ème ligne en créant une liste pour en faire l'inventaire
 
     transitions = []
-
     for transition in transition_lines:
-        i=0
+        i = 0
         while i < len(transition) and transition[i].isdigit():
             i += 1
 
         start_state = int(transition[:i])
-        #on incrémente i jusqu'à qu'on tombe sur la lettre, et on séléctionne les chiffres présent avant pour extraire l'état de départ
-
         symbol = transition[i]
-
         end_state = int(transition[i + 1:])
 
         transitions.append((start_state, symbol, end_state))
-        #on insère l'état de départ, le symbole associé a la transition e l'état d'arrivé
 
     return Automaton(num_symbols, num_states, initial_states, final_states, transitions)
 
@@ -78,7 +115,6 @@ def standardisation(AF):
                 nouvelle = (i0, symbol, end_state)
                 if nouvelle not in nouvelles_transitions:
                     nouvelles_transitions.append(nouvelle)
-
 
     nouveaux_terminaux = list(AF.final_states)
     if any(e in AF.final_states for e in AF.initial_states):
@@ -125,69 +161,3 @@ def non_standard(AF):
     else:
         print("  L'automate EST standard.")
         return False
-
-def reconnaitre_mot(automate, mot):
-    # Vérification que l'automate possède un état initial unique
-    if len(automate['etats_initiaux']) != 1:
-        raise ValueError("L'automate doit avoir un seul état initial.")
-
-    # Vérifier si le mot est "end" (pour quitter)
-    if mot == "end":
-        print("Fin de la reconnaissance de mots.")
-        return True
-
-    # Récupération de l'état initial unique
-    etat_courant = next(iter(automate['etats_initiaux']))
-
-    # Parcours du mot
-    for symbole in mot:
-        # Vérifier que le symbole appartient à l'alphabet de l'automate
-        if symbole not in automate['alphabet']:
-            print(f"❌ Symbole '{symbole}' non reconnu dans l'alphabet de l'automate.")
-            return False
-
-        # Vérifier si une transition existe pour (état_courant, symbole)
-        if (etat_courant, symbole) in automate['transitions']:
-            # Extraire l'état suivant (gestion des sets et des chaînes)
-            arrivees = automate['transitions'][(etat_courant, symbole)]
-            if isinstance(arrivees, set):
-                etat_courant = next(iter(arrivees))  # Prendre le premier état du set
-            else:
-                etat_courant = arrivees  # Cas où arrivees est un état unique (chaîne ou entier)
-        else:
-            print(f"❌ Aucune transition pour ({etat_courant}, '{symbole}'). Le mot est rejeté.")
-            return False
-
-    # Vérifier si l'état final atteint est un état terminal
-    if etat_courant in automate['etats_terminaux']:
-        print(f"✅ Le mot '{mot}' est accepté.")
-        return True
-    else:
-        print(f"❌ Le mot '{mot}' est rejeté (état final {etat_courant} non terminal).")
-        return False
-
-# ******************************************************************************************************
-
-def reconnait_uniquement_mot_vide(automate):
-
-    # Vérifier qu'il y a un seul état initial
-    if len(automate['etats_initiaux']) != 1:
-        return False
-
-    # Accéder au premier élément de l'ensemble sans le convertir en liste
-    etat_initial = next(iter(automate['etats_initiaux']))
-
-    # Vérifier que l'état initial est également un état terminal
-    if etat_initial not in automate['etats_terminaux']:
-        return False
-
-    # Vérifier qu'aucune transition ne part de l'état initial
-    for (depart, symbole), arrivees in automate['transitions'].items():
-        if depart == etat_initial:
-            return False
-
-    # Si toutes les conditions sont remplies, l'automate reconnaît uniquement le mot vide
-    return True
-
-
-
