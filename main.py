@@ -15,16 +15,17 @@ def main():
         automaton.display()
 
         automate_a_utiliser = automaton
-        AFDC = None  # contiendra l'automate déterministe complet une fois calculé
+        AFDC = None
 
         while True:
             print("\n── Que voulez-vous faire ? ─────────────────")
             print("  1. Standardiser l'automate")
-            print("  2. Déterminiser et compléter l'automate")  # nouvelle option
+            print("  2. Déterminiser et compléter l'automate")
             print("  3. Minimiser l'automate")
             print("  4. Construire l'automate complémentaire")
             print("  5. Rechercher un mot")
-            print("  6. Changer d'automate")
+            print("  6. Tout faire automatiquement")
+            print("  7. Changer d'automate")
             print("  q. Quitter")
 
             choix = input("\nVotre choix : ").strip().lower()
@@ -39,41 +40,32 @@ def main():
                     print("L'automate est déjà standard, pas besoin de le standardiser.")
 
             elif choix == '2':
-                # on vérifie d'abord s'il y a des epsilon-transitions
                 a_des_epsilon = any(
                     sym == '&'
                     for (depart, sym, arrivee) in automate_a_utiliser.transitions
                 )
-
                 if a_des_epsilon:
-                    # epsilon → on déterminise et complète directement
                     print("\n  L'automate contient des epsilon-transitions.")
                     print("  → Déterminisation et complétion directe.")
                     AFDC = determinize_and_complete(automate_a_utiliser)
-                    print("\n Automate déterminisé et complété avec succès!")
+                    print("\nAutomate déterminisé et complété avec succès!")
                     AFDC.display()
                     automate_a_utiliser = AFDC
-
                 else:
-                    # pas d'epsilon → on teste normalement
                     deterministe = is_deterministic(automate_a_utiliser)
-
                     if deterministe:
                         complet = is_complete(automate_a_utiliser)
                         if complet:
-                            # déjà déterministe et complet, rien à faire
                             AFDC = automate_a_utiliser
-                            print("\n✅ L'automate est déjà déterministe et complet.")
+                            print("\nL'automate est déjà déterministe et complet.")
                         else:
-                            # déterministe mais pas complet → on complète
                             AFDC = complete(automate_a_utiliser)
-                            print("\n✅ Automate complété avec succès!")
+                            print("\nAutomate complété avec succès!")
                             AFDC.display()
                             automate_a_utiliser = AFDC
                     else:
-                        # pas déterministe → on déterminise et complète
                         AFDC = determinize_and_complete(automate_a_utiliser)
-                        print("\n✅ Automate déterminisé et complété avec succès!")
+                        print("\nAutomate déterminisé et complété avec succès!")
                         AFDC.display()
                         automate_a_utiliser = AFDC
 
@@ -90,7 +82,7 @@ def main():
 
             elif choix == '4':
                 A_comp = automate_complementaire(automate_a_utiliser)
-                print("\n✅ Automate complémentaire construit avec succès !")
+                print("\nAutomate complémentaire construit avec succès !")
                 A_comp.display()
                 automate_a_utiliser = A_comp
 
@@ -106,6 +98,59 @@ def main():
                     automate_a_utiliser.reconnaitre_mot(mot)
 
             elif choix == '6':
+                print("\n══ Traitement automatique complet ══════════")
+
+                # Étape 1 : Standardisation si nécessaire
+                print("\n── Étape 1 : Standardisation ───────────────")
+                if non_standard(automate_a_utiliser):
+                    automate_a_utiliser = standardisation(automate_a_utiliser)
+                    automate_a_utiliser.display()
+
+                # Étape 2 : Déterminisation et complétion
+                print("\n── Étape 2 : Déterminisation et complétion ─")
+                a_des_epsilon = any(
+                    sym == '&'
+                    for (depart, sym, arrivee) in automate_a_utiliser.transitions
+                )
+                if a_des_epsilon:
+                    AFDC = determinize_and_complete(automate_a_utiliser)
+                else:
+                    deterministe = is_deterministic(automate_a_utiliser)
+                    if deterministe:
+                        complet = is_complete(automate_a_utiliser)
+                        if complet:
+                            AFDC = automate_a_utiliser
+                            print("L'automate est déjà déterministe et complet.")
+                        else:
+                            AFDC = complete(automate_a_utiliser)
+                    else:
+                        AFDC = determinize_and_complete(automate_a_utiliser)
+                AFDC.display()
+                automate_a_utiliser = AFDC
+
+                # Étape 3 : Minimisation
+                print("\n── Étape 3 : Minimisation ──────────────────")
+                automate_a_utiliser = automate_a_utiliser.minimize()
+                automate_a_utiliser.display_minimal()
+
+                # Étape 4 : Automate complémentaire
+                print("\n── Étape 4 : Automate complémentaire ───────")
+                automate_a_utiliser = automate_complementaire(automate_a_utiliser)
+                automate_a_utiliser.display()
+
+                # Étape 5 : Reconnaissance de mots
+                print("\n── Étape 5 : Reconnaissance de mots ────────")
+                print(f"Alphabet reconnu : {automate_a_utiliser.alphabet}")
+                while True:
+                    mot = input("Entrez un mot à tester (ou 'c' pour revenir au menu) : ").strip()
+                    if mot.lower() == 'c':
+                        break
+                    if not mot:
+                        print("Veuillez entrer un mot non vide.")
+                        continue
+                    automate_a_utiliser.reconnaitre_mot(mot)
+
+            elif choix == '7':
                 break
 
             elif choix == 'q':
@@ -113,7 +158,7 @@ def main():
                 exit()
 
             else:
-                print("⚠️ Choix invalide, réessayez.")
+                print("Choix invalide, réessayez.")
 
 
 if __name__ == "__main__":
