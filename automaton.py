@@ -605,3 +605,46 @@ def determinize_and_complete(AF):
         final_states=nouveaux_finaux,
         transitions=nouvelles_transitions
     )
+
+
+ def automate_complementaire(A):
+    print("\n-- Construction de l'automate complémentaire --")
+
+    ## deterministe?
+    if est_un_automate_deterministe(A):
+        print("  L'automate fourni est déterministe.")
+        A_det = A
+    else:
+        print("  L'automate fourni n'est pas déterministe.")
+        print("  Déterminisation et complétion en cours...")
+        A_det = determinisation_et_completion_automate(A)
+
+    # complet?
+    if is_complete(A_det):
+        print("  L'automate est déjà complet.")
+        A_complet = A_det
+    else:
+        print("  Complétion de l'automate...")
+        A_complet = complete(A_det)
+
+    print("  Le complément est construit à partir de cet automate.")
+
+    #inversion
+    nouveaux_finaux = [
+        etat for etat in range(A_complet.num_states)
+        if etat not in A_complet.final_states
+    ]
+
+    print(f"  Anciens états finaux : {A_complet.final_states}")
+    print(f"  Nouveaux états finaux : {nouveaux_finaux}")
+
+   #automate 
+    AComp = Automaton(
+        num_symbols=A_complet.num_symbols,
+        num_states=A_complet.num_states,
+        initial_states=A_complet.initial_states,
+        final_states=nouveaux_finaux,
+        transitions=A_complet.transitions
+    )
+
+    return AComp 
