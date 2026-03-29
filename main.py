@@ -1,4 +1,4 @@
-from automaton import read_txt, non_standard, standardisation, is_deterministic, is_complete, complete, determinize_and_complete
+from automaton import read_txt, non_standard, standardisation, is_deterministic, is_complete, complete, determinize_and_complete, automate_complementaire
 
 
 def main():
@@ -22,8 +22,9 @@ def main():
             print("  1. Standardiser l'automate")
             print("  2. Déterminiser et compléter l'automate")  # nouvelle option
             print("  3. Minimiser l'automate")
-            print("  4. Rechercher un mot")
-            print("  5. Changer d'automate")
+            print("  4. Construire l'automate complémentaire")
+            print("  5. Rechercher un mot")
+            print("  6. Changer d'automate")
             print("  q. Quitter")
 
             choix = input("\nVotre choix : ").strip().lower()
@@ -82,6 +83,12 @@ def main():
                 automate_a_utiliser = automate_minimise
 
             elif choix == '4':
+                A_comp = automate_complementaire(automate_a_utiliser)
+                print("\n✅ Automate complémentaire construit avec succès !")
+                A_comp.display()
+                automate_a_utiliser = A_comp
+
+            elif choix == '5':
                 print(f"\nAlphabet reconnu : {automate_a_utiliser.alphabet}")
                 while True:
                     mot = input("Entrez un mot à tester (ou 'c' pour revenir au menu) : ").strip()
@@ -92,7 +99,7 @@ def main():
                         continue
                     automate_a_utiliser.reconnaitre_mot(mot)
 
-            elif choix == '5':
+            elif choix == '6':
                 break
 
             elif choix == 'q':
