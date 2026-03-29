@@ -1,0 +1,103 @@
+── Automate de base ────────────────────────
+Automate chargé :
+Nombre de lettres : 2
+Nombre d'états:  6
+Etats initiaux :  [0]
+Etats finaux : [1, 2, 3, 4]
+Transitions :
+0 --a--> 1
+0 --b--> 4
+1 --a--> 2
+1 --b--> 3
+2 --a--> 2
+2 --b--> 3
+3 --a--> 5
+3 --b--> 5
+4 --a--> 5
+4 --b--> 5
+5 --a--> 5
+5 --b--> 5
+
+── Étape 1 : Standardisation ───────────────
+
+── Test : standard ? ──────────────────────
+  L'automate EST standard.
+
+── Étape 2 : Déterminisation et complétion ─
+
+── Test : déterministe ? ──────────────────
+  L'automate EST déterministe.
+
+── Test : complet ? ───────────────────────
+  L'automate EST complet.
+L'automate est déjà déterministe et complet.
+Automate chargé :
+Nombre de lettres : 2
+Nombre d'états:  6
+Etats initiaux :  [0]
+Etats finaux : [1, 2, 3, 4]
+Transitions :
+0 --a--> 1
+0 --b--> 4
+1 --a--> 2
+1 --b--> 3
+2 --a--> 2
+2 --b--> 3
+3 --a--> 5
+3 --b--> 5
+4 --a--> 5
+4 --b--> 5
+5 --a--> 5
+5 --b--> 5
+
+── Étape 3 : Minimisation ──────────────────
+
+── Automate minimal ──────────────────────
+États (groupes fusionnés) :
+  0 -> [1, 2]
+  1 -> [3, 4]
+  2 -> [0]
+  3 -> [5]
+Automate chargé :
+Nombre de lettres : 2
+Nombre d'états:  4
+Etats initiaux :  [2]
+Etats finaux : [0, 1]
+Transitions :
+0 --a--> 0
+0 --b--> 1
+1 --a--> 3
+1 --b--> 3
+2 --a--> 0
+2 --b--> 1
+3 --a--> 3
+3 --b--> 3
+
+── Étape 4 : Automate complémentaire ───────
+
+-- Construction de l'automate complémentaire --
+
+── Test : déterministe ? ──────────────────
+  L'automate EST déterministe.
+
+── Test : complet ? ───────────────────────
+  L'automate EST complet.
+  L'automate est déjà déterministe et complet.
+  Le complément est construit à partir de cet automate.
+Automate chargé :
+Nombre de lettres : 2
+Nombre d'états:  4
+Etats initiaux :  [2]
+Etats finaux : [2, 3]
+Transitions :
+0 --a--> 0
+0 --b--> 1
+1 --a--> 3
+1 --b--> 3
+2 --a--> 0
+2 --b--> 1
+3 --a--> 3
+3 --b--> 3
+
+── Étape 5 : Reconnaissance de mots ────────
+Alphabet reconnu : {'b', 'a'}
