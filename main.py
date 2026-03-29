@@ -14,12 +14,17 @@ def main():
         # Affichage de l'automate
         automaton.display()
 
+
         if non_standard(automaton):
             reponse = input("\nVoulez-vous standardiser l'automate ? (o/n) : ").strip().lower()
             if reponse == 'o':
                 SFA = standardisation(automaton)
                 SFA.display()
                 automaton = SFA
+
+
+
+
 
 
 if __name__ == "__main__":

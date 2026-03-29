@@ -125,3 +125,69 @@ def non_standard(AF):
     else:
         print("  L'automate EST standard.")
         return False
+
+def reconnaitre_mot(automate, mot):
+    # Vérification que l'automate possède un état initial unique
+    if len(automate['etats_initiaux']) != 1:
+        raise ValueError("L'automate doit avoir un seul état initial.")
+
+    # Vérifier si le mot est "end" (pour quitter)
+    if mot == "end":
+        print("Fin de la reconnaissance de mots.")
+        return True
+
+    # Récupération de l'état initial unique
+    etat_courant = next(iter(automate['etats_initiaux']))
+
+    # Parcours du mot
+    for symbole in mot:
+        # Vérifier que le symbole appartient à l'alphabet de l'automate
+        if symbole not in automate['alphabet']:
+            print(f"❌ Symbole '{symbole}' non reconnu dans l'alphabet de l'automate.")
+            return False
+
+        # Vérifier si une transition existe pour (état_courant, symbole)
+        if (etat_courant, symbole) in automate['transitions']:
+            # Extraire l'état suivant (gestion des sets et des chaînes)
+            arrivees = automate['transitions'][(etat_courant, symbole)]
+            if isinstance(arrivees, set):
+                etat_courant = next(iter(arrivees))  # Prendre le premier état du set
+            else:
+                etat_courant = arrivees  # Cas où arrivees est un état unique (chaîne ou entier)
+        else:
+            print(f"❌ Aucune transition pour ({etat_courant}, '{symbole}'). Le mot est rejeté.")
+            return False
+
+    # Vérifier si l'état final atteint est un état terminal
+    if etat_courant in automate['etats_terminaux']:
+        print(f"✅ Le mot '{mot}' est accepté.")
+        return True
+    else:
+        print(f"❌ Le mot '{mot}' est rejeté (état final {etat_courant} non terminal).")
+        return False
+
+# ******************************************************************************************************
+
+def reconnait_uniquement_mot_vide(automate):
+
+    # Vérifier qu'il y a un seul état initial
+    if len(automate['etats_initiaux']) != 1:
+        return False
+
+    # Accéder au premier élément de l'ensemble sans le convertir en liste
+    etat_initial = next(iter(automate['etats_initiaux']))
+
+    # Vérifier que l'état initial est également un état terminal
+    if etat_initial not in automate['etats_terminaux']:
+        return False
+
+    # Vérifier qu'aucune transition ne part de l'état initial
+    for (depart, symbole), arrivees in automate['transitions'].items():
+        if depart == etat_initial:
+            return False
+
+    # Si toutes les conditions sont remplies, l'automate reconnaît uniquement le mot vide
+    return True
+
+
+
