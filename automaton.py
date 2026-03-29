@@ -113,19 +113,21 @@ def read_txt(filename):
 def standardisation(AF):
     print("\n── Standardisation ────────────────────────")
 
-    i0 = AF.num_states
+    i0 = AF.num_states  # Le nouvel état initial i0 reçoit le numéro suivant le dernier état existant (les états vont de 0 à num_states-1, donc i0 = num_states)
 
-    nouvelles_transitions = list(AF.transitions)
+    nouvelles_transitions = list(AF.transitions) # On copie toutes les transitions existantes dans la nouvelle liste
 
+    # Pour chaque ancien état initial, on copie ses transitions sortantes vers i0
+    # i0 "hérite" ainsi du comportement de tous les anciens états initiaux
     for etat_init in AF.initial_states:
         for (start_state, symbol, end_state) in AF.transitions:
             if start_state == etat_init:
                 nouvelle = (i0, symbol, end_state)
-                if nouvelle not in nouvelles_transitions:
+                if nouvelle not in nouvelles_transitions:   # On évite les doublons
                     nouvelles_transitions.append(nouvelle)
 
-    nouveaux_terminaux = list(AF.final_states)
-    if any(e in AF.final_states for e in AF.initial_states):
+    nouveaux_terminaux = list(AF.final_states)    # On copie la liste des états terminaux existants
+    if any(e in AF.final_states for e in AF.initial_states):    # Si un ancien état initial était terminal, i0 doit l'être aussi (pour que le langage reconnu reste le même)
         if i0 not in nouveaux_terminaux:
             nouveaux_terminaux.append(i0)
 
@@ -134,9 +136,10 @@ def standardisation(AF):
     if i0 in nouveaux_terminaux:
         print(f"  {i0} est aussi terminal (un ancien initial l'était).")
 
+    # On retourne le nouvel automate standardisé avec i0 comme seul état initial
     return Automaton(
         num_symbols=AF.num_symbols,
-        num_states=AF.num_states + 1,
+        num_states=AF.num_states + 1,    # un état de plus
         initial_states=[i0],
         final_states=nouveaux_terminaux,
         transitions=nouvelles_transitions
@@ -147,28 +150,31 @@ def non_standard(AF):
     print("\n── Test : standard ? ──────────────────────")
     raisons = []
 
+    # Condition 1 : un automate standard a exactement UN état initial
     if len(AF.initial_states) != 1:
         raisons.append(
             f"  → Nombre d'états initiaux : {len(AF.initial_states)} (doit être 1)"
         )
 
+    # Condition 2 : aucune transition ne doit arriver sur l'état initial
     if len(AF.initial_states) >= 1:
         etat_init = AF.initial_states[0]
         for (start_state, symbol, end_state) in AF.transitions:
-            if end_state == etat_init:
+            if end_state == etat_init:       # une transition arrive sur l'état initial
                 raisons.append(
                     f"  → Transition ({start_state}, '{symbol}') "
                     f"arrive sur l'état initial {etat_init}"
                 )
 
+    # Si on a trouvé au moins une raison, l'automate est non standard
     if raisons:
         print("  L'automate N'EST PAS standard :")
         for r in raisons:
             print(r)
-        return True
+        return True      # non standard
     else:
         print("  L'automate EST standard.")
-        return False
+        return False     # standard
 
 
 def minimize(self):

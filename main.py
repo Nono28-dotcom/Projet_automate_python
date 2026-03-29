@@ -10,50 +10,56 @@ def main():
             break
 
         filename = f"../Projet_automate_python/automates_de_tests/A{numero}.txt"
-        automaton = read_txt(filename)  # automaton est une instance de la classe Automaton
+        automaton = read_txt(filename)
 
-        # Affichage de l'automate
         automaton.display()
 
-        # Variable pour stocker l'automate à utiliser
         automate_a_utiliser = automaton
 
-        # Gestion de la standardisation
-        if non_standard(automaton):
-            reponse = input("\nVoulez-vous standardiser l'automate ? (o/n) : ").strip().lower()
-            if reponse == 'o':
-                SFA = standardisation(automaton)
-                SFA.display()
-                automate_a_utiliser = SFA  # SFA est aussi une instance de la classe Automaton
-                print("✅ Automate standardisé avec succès!")
+        while True:
+            print("\n── Que voulez-vous faire ? ─────────────────")
+            print("  1. Standardiser l'automate")
+            print("  2. Minimiser l'automate")
+            print("  3. Rechercher un mot")
+            print("  4. Changer d'automate")
+            print("  q. Quitter")
 
-        # Recherche de mot
-        choix_recherche = input("\nSouhaitez-vous rechercher un mot dans l'automate ? (oui/non) : ")
+            choix = input("\nVotre choix : ").strip().lower()
 
-        if choix_recherche.lower() == 'oui':
-            print(f"\n🔍 Alphabet reconnu : {automate_a_utiliser.alphabet}")
-
-            while True:
-                mot = input("Entrez un mot à tester (ou 'c' pour changer d'automate) : ").strip()
-
-                if mot.lower() == 'c':
-                    print("↩️ Retour à la sélection...")
-                    break
-
-                if not mot:
-                    print("⚠️ Veuillez entrer un mot non vide.")
-                    continue
-
-                # Appel de la méthode reconnaitre_mot de la classe Automaton
-                resultat = automate_a_utiliser.reconnaitre_mot(mot)
-
-                if resultat:
-                    print(f"✅ Le mot '{mot}' est reconnu.")
+            if choix == '1':
+                if non_standard(automate_a_utiliser):
+                    SFA = standardisation(automate_a_utiliser)
+                    SFA.display()
+                    automate_a_utiliser = SFA
+                    print("Automate standardisé avec succès!")
                 else:
-                    print(f"❌ Le mot '{mot}' n'est pas reconnu.")
-        else:
-            print("D'accord, au revoir !")
-            break
+                    print("L'automate est déjà standard, pas besoin de le standardiser.")
+
+            elif choix == '2':
+                automate_minimise = automate_a_utiliser.minimize()
+                automate_minimise.display_minimal()
+                automate_a_utiliser = automate_minimise
+
+            elif choix == '3':
+                print(f"\nAlphabet reconnu : {automate_a_utiliser.alphabet}")
+                while True:
+                    mot = input("Entrez un mot à tester (ou 'c' pour revenir au menu) : ").strip()
+                    if mot.lower() == 'c':
+                        break
+                    if not mot:
+                        print("Veuillez entrer un mot non vide.")
+                        continue
+                    automate_a_utiliser.reconnaitre_mot(mot)
+
+            elif choix == '4':
+                break
+
+            elif choix == 'q':
+                print("Au revoir !")
+                exit()
+
+            else:
+                print("⚠️ Choix invalide, réessayez.")
 
 
 if __name__ == "__main__":
