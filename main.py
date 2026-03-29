@@ -100,6 +100,9 @@ def main():
             elif choix == '6':
                 print("\n══ Traitement automatique complet ══════════")
 
+                print("\n── Automate de base ────────────────────────")
+                automaton.display()
+
                 # Étape 1 : Standardisation si nécessaire
                 print("\n── Étape 1 : Standardisation ───────────────")
                 if non_standard(automate_a_utiliser):
