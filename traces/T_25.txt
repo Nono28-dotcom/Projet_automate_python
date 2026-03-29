@@ -1,0 +1,320 @@
+Automate chargé :
+Nombre de lettres : 4
+Nombre d'états:  5
+Etats initiaux :  [1]
+Etats finaux : [0]
+Transitions :
+1 --a--> 1
+1 --a--> 2
+2 --b--> 2
+2 --b--> 3
+3 --c--> 3
+3 --c--> 4
+4 --d--> 4
+4 --d--> 0
+1 --b--> 3
+2 --c--> 4
+3 --d--> 0
+1 --c--> 4
+2 --d--> 0
+1 --d--> 0
+
+── Que voulez-vous faire ? ─────────────────
+  1. Standardiser l'automate
+  2. Déterminiser et compléter l'automate
+  3. Minimiser l'automate
+  4. Construire l'automate complémentaire
+  5. Rechercher un mot
+  6. Tout faire automatiquement
+  7. Changer d'automate
+  q. Quitter
+
+Votre choix : 6
+
+══ Traitement automatique complet ══════════
+
+── Automate de base ────────────────────────
+Automate chargé :
+Nombre de lettres : 4
+Nombre d'états:  5
+Etats initiaux :  [1]
+Etats finaux : [0]
+Transitions :
+1 --a--> 1
+1 --a--> 2
+2 --b--> 2
+2 --b--> 3
+3 --c--> 3
+3 --c--> 4
+4 --d--> 4
+4 --d--> 0
+1 --b--> 3
+2 --c--> 4
+3 --d--> 0
+1 --c--> 4
+2 --d--> 0
+1 --d--> 0
+
+── Étape 1 : Standardisation ───────────────
+
+── Test : standard ? ──────────────────────
+  L'automate N'EST PAS standard :
+  → Transition (1, 'a') arrive sur l'état initial 1
+
+── Standardisation ────────────────────────
+  Nouvel état initial créé : 5
+  Il hérite des transitions de : [1]
+Automate chargé :
+Nombre de lettres : 4
+Nombre d'états:  6
+Etats initiaux :  [5]
+Etats finaux : [0]
+Transitions :
+1 --a--> 1
+1 --a--> 2
+2 --b--> 2
+2 --b--> 3
+3 --c--> 3
+3 --c--> 4
+4 --d--> 4
+4 --d--> 0
+1 --b--> 3
+2 --c--> 4
+3 --d--> 0
+1 --c--> 4
+2 --d--> 0
+1 --d--> 0
+5 --a--> 1
+5 --a--> 2
+5 --b--> 3
+5 --c--> 4
+5 --d--> 0
+
+── Étape 2 : Déterminisation et complétion ─
+
+── Test : déterministe ? ──────────────────
+  L'automate N'EST PAS déterministe :
+  → Depuis l'état 1 avec 'a' : 2 transitions → [1, 2]
+  → Depuis l'état 2 avec 'b' : 2 transitions → [2, 3]
+  → Depuis l'état 3 avec 'c' : 2 transitions → [3, 4]
+  → Depuis l'état 4 avec 'd' : 2 transitions → [4, 0]
+  → Depuis l'état 5 avec 'a' : 2 transitions → [1, 2]
+
+── Déterminisation et complétion ──────────
+
+  Traitement de l'état 0 = {5}
+    avec 'a' → {1, 2} = état 1
+    avec 'b' → {3} = état 2
+    avec 'c' → {4} = état 3
+    avec 'd' → {0} = état 4
+
+  Traitement de l'état 1 = {1, 2}
+    avec 'a' → {1, 2} = état 1
+    avec 'b' → {2, 3} = état 5
+    avec 'c' → {4} = état 3
+    avec 'd' → {0} = état 4
+
+  Traitement de l'état 2 = {3}
+    avec 'a' → RIEN
+    avec 'b' → RIEN
+    avec 'c' → {3, 4} = état 6
+    avec 'd' → {0} = état 4
+
+  Traitement de l'état 3 = {4}
+    avec 'a' → RIEN
+    avec 'b' → RIEN
+    avec 'c' → RIEN
+    avec 'd' → {0, 4} = état 7
+
+  Traitement de l'état 4 = {0}
+    avec 'a' → RIEN
+    avec 'b' → RIEN
+    avec 'c' → RIEN
+    avec 'd' → RIEN
+
+  Traitement de l'état 5 = {2, 3}
+    avec 'a' → RIEN
+    avec 'b' → {2, 3} = état 5
+    avec 'c' → {3, 4} = état 6
+    avec 'd' → {0} = état 4
+
+  Traitement de l'état 6 = {3, 4}
+    avec 'a' → RIEN
+    avec 'b' → RIEN
+    avec 'c' → {3, 4} = état 6
+    avec 'd' → {0, 4} = état 7
+
+  Traitement de l'état 7 = {0, 4}
+    avec 'a' → RIEN
+    avec 'b' → RIEN
+    avec 'c' → RIEN
+    avec 'd' → {0, 4} = état 7
+
+  État poubelle créé : 8
+
+  Correspondance des états :
+    État 0 ← {5}
+    État 1 ← {1.2}
+    État 2 ← {3}
+    État 3 ← {4}
+    État 4 ← {0} (T)
+    État 5 ← {2.3}
+    État 6 ← {3.4}
+    État 7 ← {0.4} (T)
+    État 8 ← {poubelle}
+Automate chargé :
+Nombre de lettres : 4
+Nombre d'états:  9
+Etats initiaux :  [0]
+Etats finaux : [4, 7]
+Transitions :
+0 --a--> 1
+0 --b--> 2
+0 --c--> 3
+0 --d--> 4
+1 --a--> 1
+1 --b--> 5
+1 --c--> 3
+1 --d--> 4
+2 --c--> 6
+2 --d--> 4
+3 --d--> 7
+5 --b--> 5
+5 --c--> 6
+5 --d--> 4
+6 --c--> 6
+6 --d--> 7
+7 --d--> 7
+2 --a--> 8
+2 --b--> 8
+3 --a--> 8
+3 --b--> 8
+3 --c--> 8
+4 --a--> 8
+4 --b--> 8
+4 --c--> 8
+4 --d--> 8
+5 --a--> 8
+6 --a--> 8
+6 --b--> 8
+7 --a--> 8
+7 --b--> 8
+7 --c--> 8
+8 --a--> 8
+8 --b--> 8
+8 --c--> 8
+8 --d--> 8
+
+── Étape 3 : Minimisation ──────────────────
+
+── Automate minimal ──────────────────────
+États (groupes fusionnés) :
+  0 -> [4]
+  1 -> [7]
+  2 -> [0]
+  3 -> [1]
+  4 -> [2]
+  5 -> [3]
+  6 -> [5]
+  7 -> [6]
+  8 -> [8]
+Automate chargé :
+Nombre de lettres : 4
+Nombre d'états:  9
+Etats initiaux :  [2]
+Etats finaux : [0, 1]
+Transitions :
+0 --a--> 8
+0 --b--> 8
+0 --c--> 8
+0 --d--> 8
+1 --a--> 8
+1 --b--> 8
+1 --c--> 8
+1 --d--> 1
+2 --a--> 3
+2 --b--> 4
+2 --c--> 5
+2 --d--> 0
+3 --a--> 3
+3 --b--> 6
+3 --c--> 5
+3 --d--> 0
+4 --a--> 8
+4 --b--> 8
+4 --c--> 7
+4 --d--> 0
+5 --a--> 8
+5 --b--> 8
+5 --c--> 8
+5 --d--> 1
+6 --a--> 8
+6 --b--> 6
+6 --c--> 7
+6 --d--> 0
+7 --a--> 8
+7 --b--> 8
+7 --c--> 7
+7 --d--> 1
+8 --a--> 8
+8 --b--> 8
+8 --c--> 8
+8 --d--> 8
+
+── Étape 4 : Automate complémentaire ───────
+
+-- Construction de l'automate complémentaire --
+
+── Test : déterministe ? ──────────────────
+  L'automate EST déterministe.
+
+── Test : complet ? ───────────────────────
+  L'automate EST complet.
+  L'automate est déjà déterministe et complet.
+  Le complément est construit à partir de cet automate.
+Automate chargé :
+Nombre de lettres : 4
+Nombre d'états:  9
+Etats initiaux :  [2]
+Etats finaux : [2, 3, 4, 5, 6, 7, 8]
+Transitions :
+0 --a--> 8
+0 --b--> 8
+0 --c--> 8
+0 --d--> 8
+1 --a--> 8
+1 --b--> 8
+1 --c--> 8
+1 --d--> 1
+2 --a--> 3
+2 --b--> 4
+2 --c--> 5
+2 --d--> 0
+3 --a--> 3
+3 --b--> 6
+3 --c--> 5
+3 --d--> 0
+4 --a--> 8
+4 --b--> 8
+4 --c--> 7
+4 --d--> 0
+5 --a--> 8
+5 --b--> 8
+5 --c--> 8
+5 --d--> 1
+6 --a--> 8
+6 --b--> 6
+6 --c--> 7
+6 --d--> 0
+7 --a--> 8
+7 --b--> 8
+7 --c--> 7
+7 --d--> 1
+8 --a--> 8
+8 --b--> 8
+8 --c--> 8
+8 --d--> 8
+
+── Étape 5 : Reconnaissance de mots ────────
+Alphabet reconnu : {'c', 'd', 'b', 'a'}
+Entrez un mot à tester (ou 'c' pour revenir au menu) : 

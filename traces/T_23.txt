@@ -1,0 +1,201 @@
+Automate chargé :
+Nombre de lettres : 4
+Nombre d'états:  5
+Etats initiaux :  [1]
+Etats finaux : [0]
+Transitions :
+1 --a--> 2
+2 --a--> 2
+2 --b--> 3
+3 --b--> 3
+3 --c--> 4
+4 --c--> 4
+4 --d--> 0
+0 --d--> 0
+
+── Que voulez-vous faire ? ─────────────────
+  1. Standardiser l'automate
+  2. Déterminiser et compléter l'automate
+  3. Minimiser l'automate
+  4. Construire l'automate complémentaire
+  5. Rechercher un mot
+  6. Tout faire automatiquement
+  7. Changer d'automate
+  q. Quitter
+
+Votre choix : 6
+
+══ Traitement automatique complet ══════════
+
+── Automate de base ────────────────────────
+Automate chargé :
+Nombre de lettres : 4
+Nombre d'états:  5
+Etats initiaux :  [1]
+Etats finaux : [0]
+Transitions :
+1 --a--> 2
+2 --a--> 2
+2 --b--> 3
+3 --b--> 3
+3 --c--> 4
+4 --c--> 4
+4 --d--> 0
+0 --d--> 0
+
+── Étape 1 : Standardisation ───────────────
+
+── Test : standard ? ──────────────────────
+  L'automate EST standard.
+
+── Étape 2 : Déterminisation et complétion ─
+
+── Test : déterministe ? ──────────────────
+  L'automate EST déterministe.
+
+── Test : complet ? ───────────────────────
+  → Pas de transition depuis l'état 0 avec 'a'
+  → Pas de transition depuis l'état 0 avec 'b'
+  → Pas de transition depuis l'état 0 avec 'c'
+  → Pas de transition depuis l'état 1 avec 'b'
+  → Pas de transition depuis l'état 1 avec 'c'
+  → Pas de transition depuis l'état 1 avec 'd'
+  → Pas de transition depuis l'état 2 avec 'c'
+  → Pas de transition depuis l'état 2 avec 'd'
+  → Pas de transition depuis l'état 3 avec 'a'
+  → Pas de transition depuis l'état 3 avec 'd'
+  → Pas de transition depuis l'état 4 avec 'a'
+  → Pas de transition depuis l'état 4 avec 'b'
+  L'automate N'EST PAS complet.
+
+── Complétion ─────────────────────────────
+  → Transition ajoutée : 0 --a--> 5 (poubelle)
+  → Transition ajoutée : 0 --b--> 5 (poubelle)
+  → Transition ajoutée : 0 --c--> 5 (poubelle)
+  → Transition ajoutée : 1 --b--> 5 (poubelle)
+  → Transition ajoutée : 1 --c--> 5 (poubelle)
+  → Transition ajoutée : 1 --d--> 5 (poubelle)
+  → Transition ajoutée : 2 --c--> 5 (poubelle)
+  → Transition ajoutée : 2 --d--> 5 (poubelle)
+  → Transition ajoutée : 3 --a--> 5 (poubelle)
+  → Transition ajoutée : 3 --d--> 5 (poubelle)
+  → Transition ajoutée : 4 --a--> 5 (poubelle)
+  → Transition ajoutée : 4 --b--> 5 (poubelle)
+  → État poubelle 5 créé, il boucle sur lui-même.
+Automate chargé :
+Nombre de lettres : 4
+Nombre d'états:  6
+Etats initiaux :  [1]
+Etats finaux : [0]
+Transitions :
+1 --a--> 2
+2 --a--> 2
+2 --b--> 3
+3 --b--> 3
+3 --c--> 4
+4 --c--> 4
+4 --d--> 0
+0 --d--> 0
+0 --a--> 5
+0 --b--> 5
+0 --c--> 5
+1 --b--> 5
+1 --c--> 5
+1 --d--> 5
+2 --c--> 5
+2 --d--> 5
+3 --a--> 5
+3 --d--> 5
+4 --a--> 5
+4 --b--> 5
+5 --a--> 5
+5 --b--> 5
+5 --c--> 5
+5 --d--> 5
+
+── Étape 3 : Minimisation ──────────────────
+
+── Automate minimal ──────────────────────
+États (groupes fusionnés) :
+  0 -> [0]
+  1 -> [1]
+  2 -> [5]
+  3 -> [2]
+  4 -> [3]
+  5 -> [4]
+Automate chargé :
+Nombre de lettres : 4
+Nombre d'états:  6
+Etats initiaux :  [1]
+Etats finaux : [0]
+Transitions :
+0 --a--> 2
+0 --b--> 2
+0 --c--> 2
+0 --d--> 0
+1 --a--> 3
+1 --b--> 2
+1 --c--> 2
+1 --d--> 2
+2 --a--> 2
+2 --b--> 2
+2 --c--> 2
+2 --d--> 2
+3 --a--> 3
+3 --b--> 4
+3 --c--> 2
+3 --d--> 2
+4 --a--> 2
+4 --b--> 4
+4 --c--> 5
+4 --d--> 2
+5 --a--> 2
+5 --b--> 2
+5 --c--> 5
+5 --d--> 0
+
+── Étape 4 : Automate complémentaire ───────
+
+-- Construction de l'automate complémentaire --
+
+── Test : déterministe ? ──────────────────
+  L'automate EST déterministe.
+
+── Test : complet ? ───────────────────────
+  L'automate EST complet.
+  L'automate est déjà déterministe et complet.
+  Le complément est construit à partir de cet automate.
+Automate chargé :
+Nombre de lettres : 4
+Nombre d'états:  6
+Etats initiaux :  [1]
+Etats finaux : [1, 2, 3, 4, 5]
+Transitions :
+0 --a--> 2
+0 --b--> 2
+0 --c--> 2
+0 --d--> 0
+1 --a--> 3
+1 --b--> 2
+1 --c--> 2
+1 --d--> 2
+2 --a--> 2
+2 --b--> 2
+2 --c--> 2
+2 --d--> 2
+3 --a--> 3
+3 --b--> 4
+3 --c--> 2
+3 --d--> 2
+4 --a--> 2
+4 --b--> 4
+4 --c--> 5
+4 --d--> 2
+5 --a--> 2
+5 --b--> 2
+5 --c--> 5
+5 --d--> 0
+
+── Étape 5 : Reconnaissance de mots ────────
+Alphabet reconnu : {'c', 'd', 'b', 'a'}
+Entrez un mot à tester (ou 'c' pour revenir au menu) :

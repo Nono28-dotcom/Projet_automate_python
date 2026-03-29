@@ -1,0 +1,285 @@
+Automate chargé :
+Nombre de lettres : 4
+Nombre d'états:  9
+Etats initiaux :  [1, 6, 7, 8, 0]
+Etats finaux : [5]
+Transitions :
+1 --a--> 2
+6 --a--> 2
+2 --b--> 3
+7 --b--> 3
+3 --c--> 4
+8 --c--> 4
+4 --d--> 5
+0 --d--> 5
+
+── Que voulez-vous faire ? ─────────────────
+  1. Standardiser l'automate
+  2. Déterminiser et compléter l'automate
+  3. Minimiser l'automate
+  4. Construire l'automate complémentaire
+  5. Rechercher un mot
+  6. Tout faire automatiquement
+  7. Changer d'automate
+  q. Quitter
+
+Votre choix : 6
+
+══ Traitement automatique complet ══════════
+
+── Automate de base ────────────────────────
+Automate chargé :
+Nombre de lettres : 4
+Nombre d'états:  9
+Etats initiaux :  [1, 6, 7, 8, 0]
+Etats finaux : [5]
+Transitions :
+1 --a--> 2
+6 --a--> 2
+2 --b--> 3
+7 --b--> 3
+3 --c--> 4
+8 --c--> 4
+4 --d--> 5
+0 --d--> 5
+
+── Étape 1 : Standardisation ───────────────
+
+── Test : standard ? ──────────────────────
+  L'automate N'EST PAS standard :
+  → Nombre d'états initiaux : 5 (doit être 1)
+
+── Standardisation ────────────────────────
+  Nouvel état initial créé : 9
+  Il hérite des transitions de : [1, 6, 7, 8, 0]
+Automate chargé :
+Nombre de lettres : 4
+Nombre d'états:  10
+Etats initiaux :  [9]
+Etats finaux : [5]
+Transitions :
+1 --a--> 2
+6 --a--> 2
+2 --b--> 3
+7 --b--> 3
+3 --c--> 4
+8 --c--> 4
+4 --d--> 5
+0 --d--> 5
+9 --a--> 2
+9 --b--> 3
+9 --c--> 4
+9 --d--> 5
+
+── Étape 2 : Déterminisation et complétion ─
+
+── Test : déterministe ? ──────────────────
+  L'automate EST déterministe.
+
+── Test : complet ? ───────────────────────
+  → Pas de transition depuis l'état 0 avec 'a'
+  → Pas de transition depuis l'état 0 avec 'b'
+  → Pas de transition depuis l'état 0 avec 'c'
+  → Pas de transition depuis l'état 1 avec 'b'
+  → Pas de transition depuis l'état 1 avec 'c'
+  → Pas de transition depuis l'état 1 avec 'd'
+  → Pas de transition depuis l'état 2 avec 'a'
+  → Pas de transition depuis l'état 2 avec 'c'
+  → Pas de transition depuis l'état 2 avec 'd'
+  → Pas de transition depuis l'état 3 avec 'a'
+  → Pas de transition depuis l'état 3 avec 'b'
+  → Pas de transition depuis l'état 3 avec 'd'
+  → Pas de transition depuis l'état 4 avec 'a'
+  → Pas de transition depuis l'état 4 avec 'b'
+  → Pas de transition depuis l'état 4 avec 'c'
+  → Pas de transition depuis l'état 5 avec 'a'
+  → Pas de transition depuis l'état 5 avec 'b'
+  → Pas de transition depuis l'état 5 avec 'c'
+  → Pas de transition depuis l'état 5 avec 'd'
+  → Pas de transition depuis l'état 6 avec 'b'
+  → Pas de transition depuis l'état 6 avec 'c'
+  → Pas de transition depuis l'état 6 avec 'd'
+  → Pas de transition depuis l'état 7 avec 'a'
+  → Pas de transition depuis l'état 7 avec 'c'
+  → Pas de transition depuis l'état 7 avec 'd'
+  → Pas de transition depuis l'état 8 avec 'a'
+  → Pas de transition depuis l'état 8 avec 'b'
+  → Pas de transition depuis l'état 8 avec 'd'
+  L'automate N'EST PAS complet.
+
+── Complétion ─────────────────────────────
+  → Transition ajoutée : 0 --a--> 10 (poubelle)
+  → Transition ajoutée : 0 --b--> 10 (poubelle)
+  → Transition ajoutée : 0 --c--> 10 (poubelle)
+  → Transition ajoutée : 1 --b--> 10 (poubelle)
+  → Transition ajoutée : 1 --c--> 10 (poubelle)
+  → Transition ajoutée : 1 --d--> 10 (poubelle)
+  → Transition ajoutée : 2 --a--> 10 (poubelle)
+  → Transition ajoutée : 2 --c--> 10 (poubelle)
+  → Transition ajoutée : 2 --d--> 10 (poubelle)
+  → Transition ajoutée : 3 --a--> 10 (poubelle)
+  → Transition ajoutée : 3 --b--> 10 (poubelle)
+  → Transition ajoutée : 3 --d--> 10 (poubelle)
+  → Transition ajoutée : 4 --a--> 10 (poubelle)
+  → Transition ajoutée : 4 --b--> 10 (poubelle)
+  → Transition ajoutée : 4 --c--> 10 (poubelle)
+  → Transition ajoutée : 5 --a--> 10 (poubelle)
+  → Transition ajoutée : 5 --b--> 10 (poubelle)
+  → Transition ajoutée : 5 --c--> 10 (poubelle)
+  → Transition ajoutée : 5 --d--> 10 (poubelle)
+  → Transition ajoutée : 6 --b--> 10 (poubelle)
+  → Transition ajoutée : 6 --c--> 10 (poubelle)
+  → Transition ajoutée : 6 --d--> 10 (poubelle)
+  → Transition ajoutée : 7 --a--> 10 (poubelle)
+  → Transition ajoutée : 7 --c--> 10 (poubelle)
+  → Transition ajoutée : 7 --d--> 10 (poubelle)
+  → Transition ajoutée : 8 --a--> 10 (poubelle)
+  → Transition ajoutée : 8 --b--> 10 (poubelle)
+  → Transition ajoutée : 8 --d--> 10 (poubelle)
+  → État poubelle 10 créé, il boucle sur lui-même.
+Automate chargé :
+Nombre de lettres : 4
+Nombre d'états:  11
+Etats initiaux :  [9]
+Etats finaux : [5]
+Transitions :
+1 --a--> 2
+6 --a--> 2
+2 --b--> 3
+7 --b--> 3
+3 --c--> 4
+8 --c--> 4
+4 --d--> 5
+0 --d--> 5
+9 --a--> 2
+9 --b--> 3
+9 --c--> 4
+9 --d--> 5
+0 --a--> 10
+0 --b--> 10
+0 --c--> 10
+1 --b--> 10
+1 --c--> 10
+1 --d--> 10
+2 --a--> 10
+2 --c--> 10
+2 --d--> 10
+3 --a--> 10
+3 --b--> 10
+3 --d--> 10
+4 --a--> 10
+4 --b--> 10
+4 --c--> 10
+5 --a--> 10
+5 --b--> 10
+5 --c--> 10
+5 --d--> 10
+6 --b--> 10
+6 --c--> 10
+6 --d--> 10
+7 --a--> 10
+7 --c--> 10
+7 --d--> 10
+8 --a--> 10
+8 --b--> 10
+8 --d--> 10
+10 --a--> 10
+10 --b--> 10
+10 --c--> 10
+10 --d--> 10
+
+── Étape 3 : Minimisation ──────────────────
+
+── Automate minimal ──────────────────────
+États (groupes fusionnés) :
+  0 -> [5]
+  1 -> [0, 4]
+  2 -> [9]
+  3 -> [1, 6]
+  4 -> [10]
+  5 -> [2, 7]
+  6 -> [3, 8]
+Automate chargé :
+Nombre de lettres : 4
+Nombre d'états:  7
+Etats initiaux :  [2]
+Etats finaux : [0]
+Transitions :
+0 --a--> 4
+0 --b--> 4
+0 --c--> 4
+0 --d--> 4
+1 --a--> 4
+1 --b--> 4
+1 --c--> 4
+1 --d--> 0
+2 --a--> 5
+2 --b--> 6
+2 --c--> 1
+2 --d--> 0
+3 --a--> 5
+3 --b--> 4
+3 --c--> 4
+3 --d--> 4
+4 --a--> 4
+4 --b--> 4
+4 --c--> 4
+4 --d--> 4
+5 --a--> 4
+5 --b--> 6
+5 --c--> 4
+5 --d--> 4
+6 --a--> 4
+6 --b--> 4
+6 --c--> 1
+6 --d--> 4
+
+── Étape 4 : Automate complémentaire ───────
+
+-- Construction de l'automate complémentaire --
+
+── Test : déterministe ? ──────────────────
+  L'automate EST déterministe.
+
+── Test : complet ? ───────────────────────
+  L'automate EST complet.
+  L'automate est déjà déterministe et complet.
+  Le complément est construit à partir de cet automate.
+Automate chargé :
+Nombre de lettres : 4
+Nombre d'états:  7
+Etats initiaux :  [2]
+Etats finaux : [1, 2, 3, 4, 5, 6]
+Transitions :
+0 --a--> 4
+0 --b--> 4
+0 --c--> 4
+0 --d--> 4
+1 --a--> 4
+1 --b--> 4
+1 --c--> 4
+1 --d--> 0
+2 --a--> 5
+2 --b--> 6
+2 --c--> 1
+2 --d--> 0
+3 --a--> 5
+3 --b--> 4
+3 --c--> 4
+3 --d--> 4
+4 --a--> 4
+4 --b--> 4
+4 --c--> 4
+4 --d--> 4
+5 --a--> 4
+5 --b--> 6
+5 --c--> 4
+5 --d--> 4
+6 --a--> 4
+6 --b--> 4
+6 --c--> 1
+6 --d--> 4
+
+── Étape 5 : Reconnaissance de mots ────────
+Alphabet reconnu : {'b', 'd', 'a', 'c'}
+Entrez un mot à tester (ou 'c' pour revenir au menu) :
