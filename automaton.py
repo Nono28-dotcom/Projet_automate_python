@@ -68,6 +68,131 @@ class Automaton:
             print(f"❌ Le mot '{mot}' est rejeté (état {etat_courant} non terminal).")
             return False
 
+    def minimize(self):
+        alphabet = [chr(ord('a') + i) for i in range(self.num_symbols)]
+        # on génére l'alphabet selon le nombre de symboles de l'automate
+
+        final_states = set(self.final_states)
+        non_final_states = set(range(self.num_states)) - final_states
+
+        # Initialisation propre des partitions (évite les ensembles vides)
+        partitions = []
+        if final_states: partitions.append(final_states)
+        if non_final_states: partitions.append(non_final_states)
+        # on crée la partition initiale en créant des ensembles d'états
+
+        changed = True
+
+        while changed:
+            changed = False
+            new_partitions = []
+            # on répéte la boucle tant que l'automate est modifié
+
+            for group in partitions:
+                if len(group) <= 1:
+                    new_partitions.append(group)
+                    continue
+
+                subgroups = {}
+                # on prends un groupe d'état dans la partition
+
+                for state in group:
+                    signature = []
+                    # pour chaque état, la signature décrit vers quel groupe il va
+
+                    for symbol in alphabet:
+                        next_states = [
+                            t[2] for t in self.transitions
+                            if t[0] == state and t[1] == symbol
+                        ]
+                        # on crée ici pour chaque état de l'alphabet une liste qui fait l'inventaire de chauque état suivant en faisant correspondre l'état et le symbole avec l'automate chargé
+
+                        next_state = next_states[0] if next_states else None
+                        # on crée une variable qui stock l'état suivant si il existe
+
+                        # CORRECTION : On cherche l'indice dans la partition STABLE (partitions)
+                        target_partition_idx = -1
+                        for i, p in enumerate(partitions):
+                            if next_state in p:
+                                target_partition_idx = i
+                                break
+                        signature.append(target_partition_idx)
+                        # on rajoute l'indice de l'ensemble de la partition initiale dans lequel l'état suivant est présent
+
+                    signature = tuple(signature)
+
+                    if signature not in subgroups:
+                        subgroups[signature] = set()
+                    subgroups[signature].add(state)
+
+                new_partitions.extend(subgroups.values())
+                # on rajoute tout les nouveaux sous groupe dans la nouvelle partition
+
+                if len(subgroups) > 1:
+                    changed = True
+                # si le groupe de départ à été modifié, on relance une itération
+
+            partitions = new_partitions
+            # on remplace la partition initiale par la nouvelle partition
+
+        new_states = list(partitions)
+        # chaque groupe devient un état
+
+        new_transitions = []
+        new_initial_states = []
+        new_final = []
+
+        # on crée les listes pour le nouvel automate et on s'aprete a recalculer le nouvel état initial
+
+        for i, group in enumerate(new_states):
+            if any(s in self.initial_states for s in group):
+                new_initial_states.append(i)
+                # on cherche l'ancien état initial dans les nouveaux états
+
+            if any(s in self.final_states for s in group):
+                new_final.append(i)
+                # meme chose pour les états finaux
+
+            # On prend un représentant du groupe pour déterminer les transitions
+            representative = next(iter(group))
+            for symbol in alphabet:
+                # On cherche toutes les transitions correspondantes
+                next_states = [
+                    t[2] for t in self.transitions
+                    if t[0] == representative and t[1] == symbol
+                ]
+
+                # Sécurité : on ne cherche le groupe que si une transition existe
+                if next_states:
+                    destination = next_states[0]
+                    for j, g in enumerate(new_states):
+                        if destination in g:
+                            new_transitions.append((i, symbol, j))
+                            break  # On a trouvé le groupe, on passe au symbole suivant
+
+        # Sauvegarde correspondance
+        self.minimized_partitions = new_states
+
+        nouveau_SFA=Automaton(
+            self.num_symbols,
+            len(new_states),
+            new_initial_states,
+            new_final,
+            new_transitions
+        )
+        nouveau_SFA.minimized_partitions = new_states
+
+        return nouveau_SFA
+
+    def display_minimal(self):
+        print("\n── Automate minimal ──────────────────────")
+        print("États (groupes fusionnés) :")
+        if hasattr(self, 'minimized_partitions'):
+            for i, group in enumerate(self.minimized_partitions):
+                print(f"  {i} -> {sorted(list(group))}")
+
+        self.display()
+
 
 def read_txt(filename):
     with open(filename, "r", encoding="utf-8") as file:
@@ -177,111 +302,6 @@ def non_standard(AF):
         return False     # standard
 
 
-def minimize(self):
-    alphabet = [chr(ord('a') + i) for i in range(self.num_symbol)]
-    # on génére l'alphabet selon le nombre de symboles de l'automate
-
-    final_states = set(self.final_states)
-    non_final_states = set(range(self.num_states)) - final_states
-    partitions = [final_states, non_final_states]
-    # on crée la partition initiale en créant des ensembles d'états
-
-    changed = True
-
-    while changed:
-        changed = False
-        new_partitions = []
-        # on répéte la boucle tant que l'automate est modifié
-
-        for group in partitions:
-            subgroups = {}
-            # on prends un groupe d'état dans la partition
-
-            for state in group:
-                signature = []
-                # pour chaque état, la signature décrit vers quel groupe il va
-
-                for symbol in alphabet:
-                    next_states = [
-                        t[2] for t in self.transitions
-                        if t[0] == state and t[1] == symbol
-                    ]
-                    # on crée ici pour chaque état de l'alphabet une liste qui fait l'inventaire de chauque état suivant en faisant correspondre l'état et le symbole avec l'automate chargé
-
-                    next_state = next_states[0] if next_states else None
-                    # on crée une variable qui stock l'état suivant si il existe
-
-                    for i, p in enumerate(partitions):
-                        if next_state in p:
-                            signature.append(i)
-                            break
-                    # on rajoute l'indice de l'ensemble de la partition initiale dans lequel l'état suivant est présent
-
-                signature = tuple(signature)
-
-                if signature not in subgroups:
-                    subgroups[signature] = set()
-                subgroups[signature].add(state)
-
-            new_partitions.extend(subgroups.values())
-            # on rajoute tout les nouveaux sous groupe dans la nouvelle partition
-
-            if len(subgroups) > 1:
-                changed = True
-            # si le groupe de départ à été modifié, on relance une itération
-
-        partitions = new_partitions
-        # on remplace la partition initiale par la nouvelle partition
-
-    new_states = list(partitions)
-    # chaque groupe devient un état
-
-    new_transitions = []
-    new_initial = None
-    new_final = []
-
-    # on crée les listes pour le nouvel automate et on s'aprete a recalculer le nouvel état initial
-
-    for i, group in enumerate(new_states):
-        if any(s in self.initial_states for s in group):
-            new_initial = i
-            # on cherche l'ancien état initial dans les nouveaux états
-
-        if any(s in self.final_states for s in group):
-            new_final.append(i)
-            # meme chose pour les états finaux
-
-        for symbol in alphabet:
-            state = next(iter(group))
-
-            next_state = [
-                t[2] for t in self.transitions
-                if t[0] == state and t[1] == symbol
-            ][0]
-
-            for j, g in enumerate(new_states):
-                if next_state in g:
-                    new_transitions.append((i, symbol, j))
-
-    # Sauvegarde correspondance
-    self.minimized_partitions = new_states
-
-    return Automaton(
-        self.num_symbols,
-        len(new_states),
-        [new_initial],
-        new_final,
-        new_transitions
-    )
-
-def display_minimal(self):
-    print("Automate minimal :")
-
-    print("États (groupes) :")
-    for i, group in enumerate(self.minimized_partitions):
-        print(f"{i} -> {group}")
-
-    self.display()
 
 def is_deterministic(AF):
     print("\n── Test : déterministe ? ──────────────────")
